@@ -1,6 +1,6 @@
 #Number of genera and species used
 
-df<-read.csv("~/Desktop/PhD project/corals R/data/restoration_final.csv")
+df<-read.csv("restoration_final.csv",header=T)
 library(tidyverse)
 df$Coral_Species <- gsub(" ", "_", df$Coral_Species)
 
@@ -15,11 +15,12 @@ n_distinct(df2$Genera)
 table(df2$Genera)
 
 #diversity percentage 
-#(numero generi/specie usate in un sito vs. numero generi/specie coralli totali per quel sito).
 div_perc<-(df$rest_sp_n/df$div)
 df <-cbind(df,div_perc)
 df<- df[!is.na(df$div_perc),]
-df<-df[-125,]
-mean(df$div_perc)
-max(df$div_perc)
-plot(df)
+
+to_del<-which(!is.finite(df$div_perc))
+df2<-df[-to_del,]
+nrow(df2)
+
+mean(df2$div_perc)
